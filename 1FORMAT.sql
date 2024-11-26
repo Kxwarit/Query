@@ -3,6 +3,7 @@
     ds1, ds2 : String;
 
 --------------------------
+
       GetDateRangeDialog(date1, date2);
       ds1 := FormatDateTime('yyyy-mm-dd', date1);
       ds2 := FormatDateTime('yyyy-mm-dd', date2);
@@ -18,6 +19,7 @@
       Reportname.Text := GetReportName;
 
 ---------------------------
+
         'จำนวน  '
             + GetSQLStringData('SELECT TO_CHAR(COUNT(*)::numeric, "FM999,999") as count_data'
             + ' FROM ( '
@@ -27,13 +29,8 @@
             + '  รายการ '
 
 -------------------------
+
         FormatThaiDate('dd/mm/yyyy', DBPipeline['vstdate']); 
 
         BETWEEN "'+ds1+'" AND "'+ds2+'"
--------------------
-SELECT *
-FROM ipt i
-LEFT OUTER JOIN patient p ON p.hn = i.hn
-LEFT OUTER JOIN an_stat a ON a.an = i.an
-LEFT OUTER JOIN spclty s ON s.spclty = i.spclty
-WHERE i.dchdate BETWEEN '2024-09-01' AND '2024-09-30' AND i.ward = '32'
+
