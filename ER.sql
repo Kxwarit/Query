@@ -1,0 +1,71 @@
++ ' SELECT '
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y <= 5 AND er.er_pt_type IN ("2") THEN o.vn END) AS tmale1, '
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y <= 5 AND er.er_pt_type IN ("2") THEN o.vn END) AS tfemale1,'
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y <= 5 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nmale1,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y <= 5 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nfemale1,'
+  
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y BETWEEN 6 AND 10 AND er.er_pt_type IN ("2") THEN o.vn END) AS tmale2,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y BETWEEN 6 AND 10 AND er.er_pt_type IN ("2") THEN o.vn END) AS tfemale2,'
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y BETWEEN 6 AND 10 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nmale2,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y BETWEEN 6 AND 10 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nfemale2,'
+  
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y >= 11 AND (v.age_y <= 15 AND v.age_d = 0) AND er.er_pt_type IN ("2") THEN o.vn END) AS tmale3,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y >= 11 AND (v.age_y <= 15 AND v.age_d = 0) AND er.er_pt_type IN ("2") THEN o.vn END) AS tfemale3,'
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y >= 11 AND (v.age_y <= 15 AND v.age_d = 0) AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nmale3,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y >= 11 AND (v.age_y <= 15 AND v.age_d = 0) AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nfemale3,'
+  
++ '  Count(CASE WHEN p.sex = "1" AND (v.age_y >= 15 AND v.age_d > 0) AND v.age_y <= 25 AND er.er_pt_type IN ("2") THEN o.vn END) AS tmale4,'
++ '  Count(CASE WHEN p.sex = "2" AND (v.age_y >= 15 AND v.age_d > 0) AND v.age_y <= 25 AND er.er_pt_type IN ("2") THEN o.vn END) AS tfemale4,'
++ '  Count(CASE WHEN p.sex = "1" AND (v.age_y >= 15 AND v.age_d > 0) AND v.age_y <= 25 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nmale4,'
++ '  Count(CASE WHEN p.sex = "2" AND (v.age_y >= 15 AND v.age_d > 0) AND v.age_y <= 25 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nfemale4,'
+
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y BETWEEN 26 AND 35 AND er.er_pt_type IN ("2") THEN o.vn END) AS tmale5,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y BETWEEN 26 AND 35 AND er.er_pt_type IN ("2") THEN o.vn END) AS tfemale5,'
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y BETWEEN 26 AND 35 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nmale5,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y BETWEEN 26 AND 35 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nfemale5,'
+
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y BETWEEN 36 AND 45 AND er.er_pt_type IN ("2") THEN o.vn END) AS tmale6,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y BETWEEN 36 AND 45 AND er.er_pt_type IN ("2") THEN o.vn END) AS tfemale6,'
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y BETWEEN 36 AND 45 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nmale6,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y BETWEEN 36 AND 45 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nfemale6,'
+
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y BETWEEN 46 AND 55 AND er.er_pt_type IN ("2") THEN o.vn END) AS tmale7,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y BETWEEN 46 AND 55 AND er.er_pt_type IN ("2") THEN o.vn END) AS tfemale7,'
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y BETWEEN 46 AND 55 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nmale7,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y BETWEEN 46 AND 55 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nfemale7,'
+  
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y BETWEEN 56 AND 65 AND er.er_pt_type IN ("2") THEN o.vn END) AS tmale8,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y BETWEEN 56 AND 65 AND er.er_pt_type IN ("2") THEN o.vn END) AS tfemale8,'
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y BETWEEN 56 AND 65 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nmale8,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y BETWEEN 56 AND 65 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nfemale8,'
+
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y BETWEEN 66 AND 75 AND er.er_pt_type IN ("2") THEN o.vn END) AS tmale9,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y BETWEEN 66 AND 75 AND er.er_pt_type IN ("2") THEN o.vn END) AS tfemale9,'
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y BETWEEN 66 AND 75 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nmale9,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y BETWEEN 66 AND 75 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nfemale9,'
+
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y BETWEEN 76 AND 85 AND er.er_pt_type IN ("2") THEN o.vn END) AS tmale10,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y BETWEEN 76 AND 85 AND er.er_pt_type IN ("2") THEN o.vn END) AS tfemale10,'
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y BETWEEN 76 AND 85 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nmale10,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y BETWEEN 76 AND 85 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nfemale10,'
+
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y BETWEEN 86 AND 95 AND er.er_pt_type IN ("2") THEN o.vn END) AS tmale11,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y BETWEEN 86 AND 95 AND er.er_pt_type IN ("2") THEN o.vn END) AS tfemale11,'
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y BETWEEN 86 AND 95 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nmale11,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y BETWEEN 86 AND 95 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nfemale11,'
+
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y BETWEEN 96 AND 105 AND er.er_pt_type IN ("2") THEN o.vn END) AS tmale12,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y BETWEEN 96 AND 105 AND er.er_pt_type IN ("2") THEN o.vn END) AS tfemale12,'
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y BETWEEN 96 AND 105 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nmale12,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y BETWEEN 96 AND 105 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nfemale12,'
+
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y BETWEEN 106 AND 115 AND er.er_pt_type IN ("2") THEN o.vn END) AS tmale13,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y BETWEEN 106 AND 115 AND er.er_pt_type IN ("2") THEN o.vn END) AS tfemale13,'
++ '  Count(CASE WHEN p.sex = "1" AND v.age_y BETWEEN 106 AND 115 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nmale13,'
++ '  Count(CASE WHEN p.sex = "2" AND v.age_y BETWEEN 106 AND 115 AND er.er_pt_type IN ("1","3","4") THEN o.vn END) AS nfemale13'
+
++ 'FROM er_regist er'
++ '  LEFT OUTER JOIN ovst o ON o.vn = er.vn'
++ '  LEFT OUTER JOIN patient p ON p.hn = o.hn'
++ '  LEFT OUTER JOIN vn_stat v ON v.vn = er.vn'
++ 'WHERE er.vstdate BETWEEN "2024-09-01" AND "2024-09-30"'
