@@ -14,4 +14,4 @@ FROM
 LEFT OUTER JOIN 
     iptdiag id ON id.an = i.an
 WHERE 
-    i.dchdate BETWEEN '2023-10-01' AND '2024-09-30' 
+    i.dchdate BETWEEN '2021-10-01' AND '2022-09-30' 

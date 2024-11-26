@@ -18,7 +18,6 @@ WITH DepartmentGroups AS (
             WHEN o.pttype IN ('H0','H1','H2','H4') THEN 'ชำระเงินเอง' 
             WHEN o.pttype = 'J3' THEN 'สิ่งส่งตรวจหน่วยงานภาครัฐ' 
             WHEN o.pttype IN ('J2','J5') THEN 'อื่นๆ' 
-            ELSE 'อื่นๆ' 
         END AS eligibility_group 
     FROM ovst o 
     WHERE o.vstdate BETWEEN '2023-10-01' AND '2023-09-30' 
@@ -45,7 +44,6 @@ ORDER BY
         WHEN eligibility_group = 'ตรวจสุขภาพ' THEN 13 
         WHEN eligibility_group = 'ชำระเงินเอง' THEN 14 
         WHEN eligibility_group = 'สิ่งส่งตรวจหน่วยงานภาครัฐ' THEN 15 
-        WHEN eligibility_group = 'อื่นๆ' THEN 16 
         ELSE 17 
     END;
 
