@@ -38,6 +38,8 @@ SELECT
     MAX(CASE WHEN lo.lab_items_code = '3006' THEN lo.lab_order_result END) AS Triglyceride, 
     MAX(CASE WHEN lo.lab_items_code = '3007' THEN lo.lab_order_result END) AS HDL,
     MAX(CASE WHEN lo.lab_items_code = '3008' THEN lo.lab_order_result END) AS LDL,
+    MAX(CASE WHEN lo.lab_items_code = '3014' THEN lo.lab_order_result END) AS AST,
+    MAX(CASE WHEN lo.lab_items_code = '3015' THEN lo.lab_order_result END) AS ALT,
     MAX(CASE WHEN lo.lab_items_code = '56' THEN lo.lab_order_result END) AS Color,
     MAX(CASE WHEN lo.lab_items_code = '58' THEN lo.lab_order_result END) AS Transparancy,
     MAX(CASE WHEN lo.lab_items_code = '66' THEN lo.lab_order_result END) AS Spgr, 
@@ -53,7 +55,8 @@ SELECT
     MAX(CASE WHEN lo.lab_items_code = '3085' THEN lo.lab_order_result END) AS Bacteria,
     MAX(CASE WHEN lo.lab_items_code = '43' THEN lo.lab_order_result END) AS Methamphetamine,
     MAX(CASE WHEN lo.lab_items_code = '1' THEN lo.lab_order_result END) AS HBsAg,
-    MAX(CASE WHEN lo.lab_items_code = '3185' THEN lo.lab_order_result END) AS HCV
+    MAX(CASE WHEN lo.lab_items_code = '3185' THEN lo.lab_order_result END) AS antiHCV,
+    MAX(CASE WHEN lo.lab_items_code = '3377' THEN lo.lab_order_result END) AS antiHAV,
 FROM ovst o
 INNER JOIN ckup_ovst co ON co.vn = o.vn
 LEFT OUTER JOIN patient p ON p.hn = o.hn

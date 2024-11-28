@@ -1,155 +1,137 @@
-+  ' WITH accident_counts AS (  '
-+  '     SELECT  '
-+  '         CASE  '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "V01" AND "V89" OR LEFT(id.icd10, 3) BETWEEN "V01" AND "V89" THEN "อุบัติเหตุการขนส่ง" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "W00" AND "W19" OR LEFT(id.icd10, 3) BETWEEN "W00" AND "W19" THEN "พลัด ตก หรือหกล้ม" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "W20" AND "W49" OR LEFT(id.icd10, 3) BETWEEN "W20" AND "W49" THEN "สัมผัสกับแรงเชิงกลวัตถุสิ่งของ" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "W50" AND "W64" OR LEFT(id.icd10, 3) BETWEEN "W50" AND "W64" THEN "สัมผัสกับแรงเชิงกลของสัตว์/คน" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "W65" AND "W74" OR LEFT(id.icd10, 3) BETWEEN "W65" AND "W74" THEN "การตกน้ำ จมน้ำ" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "W75" AND "W84" OR LEFT(id.icd10, 3) BETWEEN "W75" AND "W84" THEN "คุกคามการหายใจ" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "W85" AND "W99" OR LEFT(id.icd10, 3) BETWEEN "W85" AND "W99" THEN "สัมผัสกระแสไฟฟ้า รังสีและอุณหภูมิ" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "X00" AND "X99" OR LEFT(id.icd10, 3) BETWEEN "X00" AND "X99" THEN "สัมผัสควันไฟ และเปลวไฟ" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "X10" AND "X19" OR LEFT(id.icd10, 3) BETWEEN "X10" AND "X19" THEN "สัมผัสความร้อน ของร้อน" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "X20" AND "X29" OR LEFT(id.icd10, 3) BETWEEN "X20" AND "X29" THEN "สัมผัสพิษจากสัตว์หรือพืช" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "X30" AND "X39" OR LEFT(id.icd10, 3) BETWEEN "X30" AND "X39" THEN "สัมผัสพลังงานจากธรรมชาติ" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "X40" AND "X49" OR LEFT(id.icd10, 3) BETWEEN "X40" AND "X49" THEN "สัมผัสพิษและสารอื่นๆ" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "X50" AND "X57" OR LEFT(id.icd10, 3) BETWEEN "X50" AND "X57" THEN "การออกแรงเกิน" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "X58" AND "X59" OR LEFT(id.icd10, 3) BETWEEN "X58" AND "X59" THEN "สัมผัสกับสิ่งไม่ทราบแน่ชัด" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "X60" AND "X84" OR LEFT(id.icd10, 3) BETWEEN "X60" AND "X84" THEN "ทำร้ายตัวเองด้วยวิธีต่างๆ" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "X85" AND "Y09" OR LEFT(id.icd10, 3) BETWEEN "X85" AND "Y09" THEN "ถูกทำร้ายด้วยวิธีต่างๆ" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "Y10" AND "Y33" OR LEFT(id.icd10, 3) BETWEEN "Y10" AND "Y33" THEN "บาดเจ็บโดยไม่ทราบเจตนา" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "Y35" AND "Y36" OR LEFT(id.icd10, 3) BETWEEN "Y35" AND "Y36" THEN "ดำเนินการตามกฎหมายหรือสงคราม" '
-+  '             WHEN LEFT(od.icd10, 3) = "Y34" OR LEFT(id.icd10, 3) = "Y34" THEN "ไม่ทราบทั้งสาเหตุและเจตนา" '
-+  '             ELSE NULL  '
-+  '         END AS accident_type, '
-+  '         COUNT(DISTINCT CASE  '
-+  '             WHEN o.vn IS NOT NULL THEN o.vn '
-+  '             WHEN i.an IS NOT NULL THEN i.an '
-+  '         END) AS count_accidents '
-+  '     FROM  '
-+  '         er_regist er '
-+  '         LEFT JOIN ovst o ON o.vn = er.vn  '
-+  '         LEFT JOIN ovstdiag od ON od.vn = er.vn '
-+  '         LEFT JOIN ipt i ON i.vn = er.vn  '
-+  '         LEFT JOIN iptdiag id ON id.an = i.an '
-+  '     WHERE o.vstdate = "2024-09-01" OR i.dchdate = "2024-09-01" '
-+  '     GROUP BY  '
-+  '         accident_type '
-+  ' ), '
-+  ' accident_types AS ( '
-+  '     SELECT unnest(ARRAY[ '
-+  '         "อุบัติเหตุการขนส่ง", "พลัด ตก หรือหกล้ม", "สัมผัสกับแรงเชิงกลวัตถุสิ่งของ", '
-+  '         "สัมผัสกับแรงเชิงกลของสัตว์/คน", "การตกน้ำ จมน้ำ", "คุกคามการหายใจ", '
-+  '         "สัมผัสกระแสไฟฟ้า รังสีและอุณหภูมิ", "สัมผัสควันไฟ และเปลวไฟ", "สัมผัสความร้อน ของร้อน", '
-+  '         "สัมผัสพิษจากสัตว์หรือพืช", "สัมผัสพลังงานจากธรรมชาติ", "สัมผัสพิษและสารอื่นๆ", '
-+  '         "การออกแรงเกิน", "สัมผัสกับสิ่งไม่ทราบแน่ชัด", "ทำร้ายตัวเองด้วยวิธีต่างๆ", '
-+  '         "ถูกทำร้ายด้วยวิธีต่างๆ", "บาดเจ็บโดยไม่ทราบเจตนา", "ดำเนินการตามกฎหมายหรือสงคราม", '
-+  '         "ไม่ทราบทั้งสาเหตุและเจตนา" '
-+  '     ]) AS accident_type '
-+  ' ) '
-+  ' SELECT  '
-+  '     act.accident_type, '
-+  '     COALESCE(ac.count_accidents, 0) AS count_accidents '
-+  ' FROM  '
-+  '     accident_types act '
-+  '     LEFT JOIN accident_counts ac ON act.accident_type = ac.accident_type '
-+  ' WHERE  '
-+  '     act.accident_type IS NOT NULL '
-+  ' ORDER BY  '
-+  '     CASE act.accident_type '
-+  '         WHEN "อุบัติเหตุการขนส่ง" THEN 1 '
-+  '         WHEN "พลัด ตก หรือหกล้ม" THEN 2 '
-+  '         WHEN "สัมผัสกับแรงเชิงกลวัตถุสิ่งของ" THEN 3 '
-+  '         WHEN "สัมผัสกับแรงเชิงกลของสัตว์/คน" THEN 4 '
-+  '         WHEN "การตกน้ำ จมน้ำ" THEN 5 '
-+  '         WHEN "คุกคามการหายใจ" THEN 6 '
-+  '         WHEN "สัมผัสกระแสไฟฟ้า รังสีและอุณหภูมิ" THEN 7 '
-+  '         WHEN "สัมผัสควันไฟ และเปลวไฟ" THEN 8 '
-+  '         WHEN "สัมผัสความร้อน ของร้อน" THEN 9 '
-+  '         WHEN "สัมผัสพิษจากสัตว์หรือพืช" THEN 10 '
-+  '         WHEN "สัมผัสพลังงานจากธรรมชาติ" THEN 11 '
-+  '         WHEN "สัมผัสพิษและสารอื่นๆ" THEN 12 '
-+  '         WHEN "การออกแรงเกิน" THEN 13 '
-+  '         WHEN "สัมผัสกับสิ่งไม่ทราบแน่ชัด" THEN 14 '
-+  '         WHEN "ทำร้ายตัวเองด้วยวิธีต่างๆ" THEN 15 '
-+  '         WHEN "ถูกทำร้ายด้วยวิธีต่างๆ" THEN 16 '
-+  '         WHEN "บาดเจ็บโดยไม่ทราบเจตนา" THEN 17 '
-+  '         WHEN "ดำเนินการตามกฎหมายหรือสงคราม" THEN 18 '
-+  '         WHEN "ไม่ทราบทั้งสาเหตุและเจตนา" THEN 19 '
-+  '     END '
-+  ' WITH accident_counts AS ( '
-+  '     SELECT  '
-+  '         CASE  '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "V01" AND "V89" OR LEFT(id.icd10, 3) BETWEEN "V01" AND "V89" THEN "อุบัติเหตุการขนส่ง" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "W00" AND "W19" OR LEFT(id.icd10, 3) BETWEEN "W00" AND "W19" THEN "พลัด ตก หรือหกล้ม" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "W20" AND "W49" OR LEFT(id.icd10, 3) BETWEEN "W20" AND "W49" THEN "สัมผัสกับแรงเชิงกลวัตถุสิ่งของ" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "W50" AND "W64" OR LEFT(id.icd10, 3) BETWEEN "W50" AND "W64" THEN "สัมผัสกับแรงเชิงกลของสัตว์/คน" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "W65" AND "W74" OR LEFT(id.icd10, 3) BETWEEN "W65" AND "W74" THEN "การตกน้ำ จมน้ำ" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "W75" AND "W84" OR LEFT(id.icd10, 3) BETWEEN "W75" AND "W84" THEN "คุกคามการหายใจ" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "W85" AND "W99" OR LEFT(id.icd10, 3) BETWEEN "W85" AND "W99" THEN "สัมผัสกระแสไฟฟ้า รังสีและอุณหภูมิ" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "X00" AND "X99" OR LEFT(id.icd10, 3) BETWEEN "X00" AND "X99" THEN "สัมผัสควันไฟ และเปลวไฟ" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "X10" AND "X19" OR LEFT(id.icd10, 3) BETWEEN "X10" AND "X19" THEN "สัมผัสความร้อน ของร้อน" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "X20" AND "X29" OR LEFT(id.icd10, 3) BETWEEN "X20" AND "X29" THEN "สัมผัสพิษจากสัตว์หรือพืช" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "X30" AND "X39" OR LEFT(id.icd10, 3) BETWEEN "X30" AND "X39" THEN "สัมผัสพลังงานจากธรรมชาติ" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "X40" AND "X49" OR LEFT(id.icd10, 3) BETWEEN "X40" AND "X49" THEN "สัมผัสพิษและสารอื่นๆ" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "X50" AND "X57" OR LEFT(id.icd10, 3) BETWEEN "X50" AND "X57" THEN "การออกแรงเกิน" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "X58" AND "X59" OR LEFT(id.icd10, 3) BETWEEN "X58" AND "X59" THEN "สัมผัสกับสิ่งไม่ทราบแน่ชัด" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "X60" AND "X84" OR LEFT(id.icd10, 3) BETWEEN "X60" AND "X84" THEN "ทำร้ายตัวเองด้วยวิธีต่างๆ" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "X85" AND "Y09" OR LEFT(id.icd10, 3) BETWEEN "X85" AND "Y09" THEN "ถูกทำร้ายด้วยวิธีต่างๆ" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "Y10" AND "Y33" OR LEFT(id.icd10, 3) BETWEEN "Y10" AND "Y33" THEN "บาดเจ็บโดยไม่ทราบเจตนา" '
-+  '             WHEN LEFT(od.icd10, 3) BETWEEN "Y35" AND "Y36" OR LEFT(id.icd10, 3) BETWEEN "Y35" AND "Y36" THEN "ดำเนินการตามกฎหมายหรือสงคราม" '
-+  '             WHEN LEFT(od.icd10, 3) = "Y34" OR LEFT(id.icd10, 3) = "Y34" THEN "ไม่ทราบทั้งสาเหตุและเจตนา" '
-+  '             ELSE NULL  '
-+  '         END AS accident_type, '
-+  '         COUNT(DISTINCT er.vn) AS count_accidents '
-+  '     FROM  '
-+  '         er_regist er '
-+  '         LEFT JOIN ovst o ON o.vn = er.vn  '
-+  '         LEFT JOIN ovstdiag od ON od.vn = er.vn   '
-+  '         LEFT JOIN ipt i ON i.vn = er.vn  '
-+  '         LEFT JOIN iptdiag id ON id.an = i.an  '
-+  '     WHERE o.vstdate = "2024-09-01" OR i.dchdate = "2024-09-01" '
-+  '     GROUP BY  '
-+  '         accident_type '
-+  ' ), '
-+  ' accident_types AS ( '
-+  '     SELECT unnest(ARRAY[ '
-+  '         "อุบัติเหตุการขนส่ง", "พลัด ตก หรือหกล้ม", "สัมผัสกับแรงเชิงกลวัตถุสิ่งของ", '
-+  '         "สัมผัสกับแรงเชิงกลของสัตว์/คน", "การตกน้ำ จมน้ำ", "คุกคามการหายใจ", '
-+  '         "สัมผัสกระแสไฟฟ้า รังสีและอุณหภูมิ", "สัมผัสควันไฟ และเปลวไฟ", "สัมผัสความร้อน ของร้อน", '
-+  '         "สัมผัสพิษจากสัตว์หรือพืช", "สัมผัสพลังงานจากธรรมชาติ", "สัมผัสพิษและสารอื่นๆ", '
-+  '         "การออกแรงเกิน", "สัมผัสกับสิ่งไม่ทราบแน่ชัด", "ทำร้ายตัวเองด้วยวิธีต่างๆ", '
-+  '         "ถูกทำร้ายด้วยวิธีต่างๆ", "บาดเจ็บโดยไม่ทราบเจตนา", "ดำเนินการตามกฎหมายหรือสงคราม", '
-+  '         "ไม่ทราบทั้งสาเหตุและเจตนา" '
-+  '     ]) AS accident_type '
-+  ' ) '
-+  ' SELECT  '
-+  '     act.accident_type, '
-+  '     COALESCE(ac.count_accidents, 0) AS count_accidents '
-+  ' FROM  '
-+  '     accident_types act '
-+  '     LEFT JOIN accident_counts ac ON act.accident_type = ac.accident_type '
-+  ' WHERE  '
-+  '     act.accident_type IS NOT NULL '
-+  ' ORDER BY  '
-+  '     CASE act.accident_type '
-+  '         WHEN "อุบัติเหตุการขนส่ง" THEN 1 '
-+  '         WHEN "พลัด ตก หรือหกล้ม" THEN 2 '
-+  '         WHEN "สัมผัสกับแรงเชิงกลวัตถุสิ่งของ" THEN 3 '
-+  '         WHEN "สัมผัสกับแรงเชิงกลของสัตว์/คน" THEN 4 '
-+  '         WHEN "การตกน้ำ จมน้ำ" THEN 5 '
-+  '         WHEN "คุกคามการหายใจ" THEN 6 '
-+  '         WHEN "สัมผัสกระแสไฟฟ้า รังสีและอุณหภูมิ" THEN 7 '
-+  '         WHEN "สัมผัสควันไฟ และเปลวไฟ" THEN 8 '
-+  '         WHEN "สัมผัสความร้อน ของร้อน" THEN 9 '
-+  '         WHEN "สัมผัสพิษจากสัตว์หรือพืช" THEN 10 '
-+  '         WHEN "สัมผัสพลังงานจากธรรมชาติ" THEN 11 '
-+  '         WHEN "สัมผัสพิษและสารอื่นๆ" THEN 12 '
-+  '         WHEN "การออกแรงเกิน" THEN 13 '
-+  '         WHEN "สัมผัสกับสิ่งไม่ทราบแน่ชัด" THEN 14 '
-+  '         WHEN "ทำร้ายตัวเองด้วยวิธีต่างๆ" THEN 15 '
-+  '         WHEN "ถูกทำร้ายด้วยวิธีต่างๆ" THEN 16 '
-+  '         WHEN "บาดเจ็บโดยไม่ทราบเจตนา" THEN 17 '
-+  '         WHEN "ดำเนินการตามกฎหมายหรือสงคราม" THEN 18 '
-+  '         WHEN "ไม่ทราบทั้งสาเหตุและเจตนา" THEN 19 '
-+  '     END '
+      icode_list : String;
+      tc, rc :TclientDataset;
+begin   
+
+      tc := TClientDataset.Create(nil);
+      rc := TClientDataset.Create(nil);
+      
+      LoadPPImageFromSQL(Image1,'select app_icon_80x80_png from opdconfig');
+      LnDateRange.Caption := 'ช่วงวันที่ : '+Formatthaidate('d mmmm yyyy',date1) +' - '+Formatthaidate('d mmmm yyyy',date2);
+      reportName := GetReportName;
+      LnHospcodeName.Text := HospitalName;
+      LnReportName.Text := StringReplaceALL(reportName,'CUSTOM-XE-','',True);
+      LnReportName.Text := StringReplaceALL(LnReportName.Text,'CUSTOM-','',True);
+      LnReportNameOri.Text := reportName;
+      
+      LnLogin.Text := 'พิมพ์จากเครื่อง '+GetSQLStringData('select computername '
+        +' from onlineuser where onlineid = "'+GetOnlineID+'" ') 
+        +'  วันที่พิมพ์ '+FormatThaiDate('dd mmmm yyyy เวลา hh:mm น.',CurrentDateTime);
+      LnPrinterName.Text := 'ผู้พิมพ์ : '+GetSQLStringData('select officer_name from officer '
+        +' where officer.officer_login_name = "'+GetCurrentUser+'" ');
+      
+      hospcode := GetHOSVariable('hospital_code');
+      chwpart := GetSQLStringData('select chwpart from hospcode where hospcode = "'+hospcode+'"');
+      
+      death_code := GetSQLSubQueryData('select ovstost from ovstost where death_status = "Y" ');
+    
+      repeat 
+        showmessage('กรุณาเลือกช่วงวันที่มารับบริการ');
+        GetDateRangeDialog(date1, date2);
+        ds1:=FormatDateTime('yyyy-mm-dd',date1);
+        ds2:=FormatDateTime('yyyy-mm-dd',date2); 
+        date_diff := GetSQLIntegerData('select "'+ds2+'"::date - "'+ds1+'"::date');   
+      until (ds1 <> '0000-00-00') and (ds2 <> '0000-00-00'); 
+      
+      LoadPPImageFromSQL(Image1,'select app_icon_80x80_png from opdconfig');
+      LnDateRange.Caption := 'ช่วงวันที่ : '+Formatthaidate('d mmmm yyyy',date1) +' - '+Formatthaidate('d mmmm yyyy',date2);
+      reportName := GetReportName;
+      LnHospcodeName.Text := HospitalName;
+      LnReportName.Text := StringReplaceALL(reportName,'CUSTOM-XE-','',True);
+      LnReportName.Text := StringReplaceALL(LnReportName.Text,'CUSTOM-','',True);
+      LnReportNameOri.Text := reportName; 
+      
+      tc.HOSxP_GetDataset(' select er_accident_type_id::numeric as er_accident_type, er_accident_type_name as detail,' 
+          +' regexp_replace(er_accident_type_name,"[^0-9A-Za-z\-^]","","g") as code' 
+          +' from er_accident_type' 
+          +' where er_accident_type_id = 1' 
+          +' ' 
+          +' union ' 
+          +' select 1.1::numeric as er_accident_type_id,"อุบัติเหตุอื่นๆ" as detail, "" as code' 
+          +' ' 
+          +' union ' 
+          +' select er_accident_type_id::numeric, er_accident_type_name as detail,' 
+          +' regexp_replace(er_accident_type_name,"[^0-9A-Za-z\-^]","","g") as code' 
+          +' from er_accident_type' 
+          +' where er_accident_type_id > 1' 
+          +' ' 
+          +' order by er_accident_type' ) ;
+      
+          rc.HOSxP_GetDataset('select 0 as id, cast(null as char(200)) as detail, 0 as cc_1, 0 as cc_1, 0 as cc_2, 0 as cc_3,'
+              +' 0 as cc_4,0 as cc_5,0 as cc_6,0 as cc_7,0 as cc_8,0 as cc_9,0 as cc_1,0 as cc_10,0 as cc_11,'
+              +' 0 as cc_12,0 as cc_13,0 as cc_14,0 as cc_15,0 as cc_16,0 as cc_17,0 as cc_18,0 as cc_19,0 as cc_20,0 as cc_21 limit 0');
+      
+      tc.First;
+      while not tc.eof do
+      begin             
+        rc.Append;
+          rc.FieldValues['id'] :=  tc.FieldValues['er_accident_type'];
+          rc.FieldValues['detail'] :=  tc.FieldValues['detail'];
+          
+          min_icd := ExtractString(tc.FieldValues['code'], 1, '-');
+          max_icd := ExtractString(tc.FieldValues['code'], 2, '-');
+          if (min_icd <> '') then
+          begin
+            if max_icd = '' then max_icd := min_icd;
+            
+            vn_list := GetSQLSubQueryData(' select vn from ovstdiag' 
+                    +' where left(icd10,3) between "'+min_icd+'" and "'+max_icd+'" ' 
+                    +' and vstdate between "'+ds1+'" and "'+ds2+'"' 
+                    +' union ' 
+                    +' select vn from ipt, iptdiag d' 
+                    +' where ipt.an = d.an and left(icd10,3) between "'+min_icd+'" and "'+max_icd+'" ' 
+                    +' and dchdate between "'+ds1+'" and "'+ds2+'"' );
+            if vn_list = '' then
+              vn_list := '"XxxX"';
+                    
+            rc.FieldValues['cc_1'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex in("1","2") and vn in('+vn_list+') ');
+            rc.FieldValues['cc_2'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex = "1" and vn in('+vn_list+') ');
+            rc.FieldValues['cc_3'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex = "2" and vn in('+vn_list+') ');
+            
+            rc.FieldValues['cc_4'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex in("1","2") and p.chwpart = "'+chwpart+'" and vn in('+vn_list+') ');
+            rc.FieldValues['cc_5'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex = "1" and p.chwpart = "'+chwpart+'" and vn in('+vn_list+') ');
+            rc.FieldValues['cc_6'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex = "2" and p.chwpart = "'+chwpart+'" and vn in('+vn_list+') ');
+            
+            rc.FieldValues['cc_7'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex in("1","2") and an <> "" and vn in('+vn_list+') ');
+            rc.FieldValues['cc_8'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex = "1" and an <> "" and vn in('+vn_list+') ');
+            rc.FieldValues['cc_9'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex = "2" and an <> "" and vn in('+vn_list+') '); 
+              
+             
+            vn_list := GetSQLSubQueryData(' select dx.vn from ovstdiag dx, ovst' 
+                    +' where dx.vn = ovst.vn and left(icd10,3) between "'+min_icd+'" and "'+max_icd+'" ' 
+                    +' and dx.vstdate between "'+ds1+'" and "'+ds2+'" and ovst.ovstost in('+death_code+') ' 
+                    +' union ' 
+                    +' select vn from ipt, iptdiag d' 
+                    +' where ipt.an = d.an and left(icd10,3) between "'+min_icd+'" and "'+max_icd+'" ' 
+                    +' and dchdate between "'+ds1+'" and "'+ds2+'" and ipt.dchtype in("08","09") ' ); 
+            
+            vn_dba := GetSQLSubQueryData(' select er.vn from er_regist er '
+                    +' INNER JOIN ovstdiag dx ON dx.vn = er.vn' 
+                    +' where er.vstdate between "'+ds1+'" and "'+ds2+'" and dba = "Y" '
+                    +' and left(dx.icd10,3) between "'+min_icd+'" and "'+max_icd+'"');                                                     
+              
+            rc.FieldValues['cc_10'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex in("1","2") and vn in('+vn_list+') ');
+            rc.FieldValues['cc_11'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex = "1" and vn in('+vn_list+') ');
+            rc.FieldValues['cc_12'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex = "2" and vn in('+vn_list+') ');
+            
+            rc.FieldValues['cc_13'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex in("1","2") and p.chwpart = "'+chwpart+'" and vn in('+vn_list+') ');
+            rc.FieldValues['cc_14'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex = "1" and p.chwpart = "'+chwpart+'" and vn in('+vn_list+') ');
+            rc.FieldValues['cc_15'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex = "2" and p.chwpart = "'+chwpart+'" and vn in('+vn_list+') ');
+             
+            rc.FieldValues['cc_16'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex in("1","2") and an <> "" and vn in('+vn_list+') ');
+            rc.FieldValues['cc_17'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex = "1" and an <> "" and vn in('+vn_list+') ');
+            rc.FieldValues['cc_18'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex = "2" and an <> "" and vn in('+vn_list+') ');
+            
+            rc.FieldValues['cc_19'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex in("1","2") and vn in('+vn_dba+') ');
+            rc.FieldValues['cc_20'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex = "1" and vn in('+vn_dba+') ');
+            rc.FieldValues['cc_21'] := GetSQLIntegerData('select count(distinct vn) from ovst, patient p where ovst.hn = p.hn and p.sex = "2" and vn in('+vn_dba+') ');
+          end;
+        rc.Post;  
+      tc.Next;
+      end;
+      
+             
+      rc.AssignDataToMainReport;
+      
+      rc.Free;
+      tc.Free;
+      
