@@ -15,7 +15,7 @@ AND (l.lab_order_result IS NOT NULL  OR l.lab_order_result <> '...')
 GROUP BY  o.vn, p.hn, p.pname, p.fname, p.lname, p.sex, p.birthday, d.name , os.cc, h.lab_order_number, h.order_time,h.order_date, h.form_name, o.vstdate, v.age_y, v.age_m, v.age_d, h.reporter_name
 ORDER BY o.vn, h.lab_order_number
 
-
+ยอดมีผลแลป
 SELECT  p.hn, CONCAT(p.pname, p.fname, ' ', p.lname) AS ptname, p.sex, p.birthday, os.cc
 FROM ovst o 
 LEFT JOIN lab_head h ON h.vn = o.vn 
@@ -31,6 +31,7 @@ AND (os.cc LIKE '%ส่งตรวจ%' OR os.cc LIKE '%ส่งเจาะ%
 AND (l.lab_order_result IS NOT NULL  OR l.lab_order_result <> '...')   
 GROUP BY  o.vn, p.hn, p.pname, p.fname, p.lname, p.sex, p.birthday,os.cc
 
+ยอด cc ทั้งหมด
 SELECT  p.hn, CONCAT(p.pname, p.fname, ' ', p.lname) AS ptname, p.sex, p.birthday, os.cc
 FROM ovst o 
 LEFT JOIN patient p ON p.hn = o.hn  
