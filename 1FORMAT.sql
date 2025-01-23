@@ -34,3 +34,10 @@
 
         BETWEEN "'+ds1+'" AND "'+ds2+'"
 
+--------------------------
+//เบอร์
+STRING_AGG( DISTINCT CASE 
+ WHEN p.hometel <> '' AND p.hometel ~ '^[0-9-]+$' AND p.hometel !~ '^(.)\1*$' THEN p.hometel 
+ WHEN p.mobile_phone_number <> '' AND p.mobile_phone_number ~ '^[0-9-]+$' AND p.mobile_phone_number !~ '^(.)\1*$' THEN p.mobile_phone_number 
+ WHEN p.informtel <> '' AND p.informtel ~ '^[0-9-]+$' AND p.informtel !~ '^(.)\1*$' THEN p.informtel 
+ELSE NULL END, ', ') AS contact
