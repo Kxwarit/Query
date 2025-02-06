@@ -41,3 +41,8 @@ STRING_AGG( DISTINCT CASE
  WHEN p.mobile_phone_number <> '' AND p.mobile_phone_number ~ '^[0-9-]+$' AND p.mobile_phone_number !~ '^(.)\1*$' THEN p.mobile_phone_number 
  WHEN p.informtel <> '' AND p.informtel ~ '^[0-9-]+$' AND p.informtel !~ '^(.)\1*$' THEN p.informtel 
 ELSE NULL END, ', ') AS contact
+
+--------------
+STRING_AGG(CASE WHEN th.amppart = p.amppart  AND th.tmbpart = p.tmbpart THEN th.name ELSE NULL END, ', ') AS tmb,
+STRING_AGG(CASE WHEN th.amppart = p.amppart AND th.tmbpart = "00" THEN th.name ELSE NULL END, ', ') AS amp,
+STRING_AGG(CASE WHEN th.amppart = "00" AND th.tmbpart = "00" THEN th.name ELSE NULL END, ', ') AS chw
