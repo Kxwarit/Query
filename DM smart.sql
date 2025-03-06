@@ -12,13 +12,15 @@ WITH latest_visits AS (
         os.waist ,
         CONCAT(CAST(os.bps AS INT), '/', CAST(os.bpd AS INT)) AS pressure
     FROM ovst o
+    INNER JOIN clinicmember cm ON cm.hn = o.hn
     LEFT OUTER JOIN ovstdiag od ON od.vn = o.vn
     LEFT OUTER JOIN opitemrece op ON op.vn = o.vn
     LEFT OUTER JOIN patient p ON p.hn = o.hn
     LEFT OUTER JOIN thaiaddress th ON th.chwpart = p.chwpart AND th.amppart = p.amppart AND th.tmbpart = '00'
     LEFT OUTER JOIN opdscreen os ON os.vn = o.vn
     WHERE o.vstdate BETWEEN '2024-10-01' AND '2025-09-30' 
-        AND od.icd10 IN ('E118','E119')
+        AND cm.clinic = '077'AND cm.other_chronic_text LIKE'%เบาหวาน%'
+        AND o.main_dep IN ('155','053')
         AND NOT EXISTS (
             SELECT 1 
             FROM ovstdiag AS sub
@@ -35,7 +37,7 @@ WITH latest_visits AS (
         AND p.chwpart = '84' 
         AND p.amppart = '02'
         AND o.an IS NULL
-    GROUP BY od.icd10, o.vstdate, p.hn, p.cid, p.pname, p.fname, p.lname, os.bmi, os.waist ,os.bps, os.bpd, os.bw, os.height
+    GROUP BY o.vstdate, p.hn, p.cid, p.pname, p.fname, p.lname, os.bmi, os.waist ,os.bps, os.bpd, os.bw, os.height
 
 ), latest_drug AS (
     SELECT DISTINCT ON (p.hn) 
@@ -45,6 +47,7 @@ WITH latest_visits AS (
         STRING_AGG(du.shortlist, E',\n') AS drugusage,
         STRING_AGG(CONCAT(CAST(op.qty AS TEXT), ' ', d.units), E',\n') AS qty
     FROM ovst o
+    INNER JOIN clinicmember cm ON cm.hn = o.hn
     LEFT JOIN ovstdiag od ON od.vn = o.vn
     LEFT JOIN (SELECT icode, vn, drugusage, qty FROM opitemrece ) op ON op.vn = o.vn
     LEFT JOIN patient p ON p.hn = o.hn
@@ -52,7 +55,8 @@ WITH latest_visits AS (
     LEFT JOIN drugusage du ON du.drugusage = op.drugusage
     
     WHERE o.vstdate BETWEEN '2024-10-01' AND '2025-09-30'
-        AND od.icd10 IN ('E118','E119')
+        AND cm.clinic = '077'AND cm.other_chronic_text LIKE'%เบาหวาน%'
+        AND o.main_dep IN ('155','053')
         AND NOT EXISTS (
             SELECT 1 
             FROM ovstdiag AS sub
@@ -102,12 +106,14 @@ WITH latest_visits AS (
         MAX(CASE WHEN lo.lab_items_code = '3001' THEN lo.lab_order_result ELSE '' END) AS fbs,
         MAX(CASE WHEN lo.lab_items_code = '3398' THEN lo.lab_order_result ELSE '' END) AS urine
     FROM ovst o
+    INNER JOIN clinicmember cm ON cm.hn = o.hn
     LEFT JOIN ovstdiag od ON od.vn = o.vn
     LEFT JOIN patient p ON p.hn = o.hn
     LEFT JOIN lab_head lh ON lh.vn = o.vn
     LEFT JOIN lab_order lo ON lo.lab_order_number = lh.lab_order_number
     WHERE o.vstdate BETWEEN '2024-10-01' AND '2025-09-30' 
-        AND od.icd10 IN ('E118','E119')
+        AND cm.clinic = '077'AND cm.other_chronic_text LIKE'%เบาหวาน%'
+        AND o.main_dep IN ('155','053')
         AND NOT EXISTS (
             SELECT 1 
             FROM ovstdiag AS sub
@@ -139,13 +145,16 @@ WITH latest_visits AS (
         STRING_AGG(du.shortlist, E',\n') AS drugusage,
         STRING_AGG(CONCAT(CAST(op.qty AS TEXT), ' ', d.units), E',\n') AS qty
     FROM ovst o
+    INNER JOIN clinicmember cm ON cm.hn = o.hn
     LEFT JOIN ovstdiag od ON od.vn = o.vn
     LEFT JOIN (SELECT icode, vn, drugusage, qty FROM opitemrece ) op ON op.vn = o.vn
     LEFT JOIN patient p ON p.hn = o.hn
     INNER JOIN drugitems d ON d.icode = op.icode
     LEFT JOIN drugusage du ON du.drugusage = op.drugusage
+    
     WHERE o.vstdate BETWEEN '2023-10-01' AND '2024-09-30'
-        AND od.icd10 IN ('E118','E119')
+        AND cm.clinic = '077'AND cm.other_chronic_text LIKE'%เบาหวาน%'
+        AND o.main_dep IN ('155','053')
         AND NOT EXISTS (
             SELECT 1 
             FROM ovstdiag AS sub
@@ -194,15 +203,17 @@ WITH latest_visits AS (
         MAX(CASE WHEN lo.lab_items_code = '3001' THEN lo.lab_order_result ELSE '' END) AS fbs,
         MAX(CASE WHEN lo.lab_items_code = '3398' THEN lo.lab_order_result ELSE '' END) AS urine
     FROM ovst o
+    INNER JOIN clinicmember cm ON cm.hn = o.hn
     LEFT JOIN ovstdiag od ON od.vn = o.vn
     LEFT JOIN patient p ON p.hn = o.hn
     LEFT JOIN lab_head lh ON lh.vn = o.vn
     LEFT JOIN lab_order lo ON lo.lab_order_number = lh.lab_order_number
     WHERE o.vstdate BETWEEN '2023-10-01' AND '2024-09-30'
-        AND od.icd10 IN ('E118','E119')
+        AND cm.clinic = '077'AND cm.other_chronic_text LIKE'%เบาหวาน%'
+        AND o.main_dep IN ('155','053')
         AND NOT EXISTS (
                 SELECT 1 
-                FROM ovstdiag AS sub
+                FROM ovstdiag AS sub 
                 WHERE sub.vn = od.vn
                 AND (sub.icd10 BETWEEN 'C00' AND 'C979' 
                     OR sub.icd10 BETWEEN 'D00' AND 'D489'
