@@ -36,6 +36,8 @@ SELECT  p.hn, CONCAT(p.pname, p.fname, ' ', p.lname) AS ptname, p.sex, p.birthda
 FROM ovst o 
 LEFT JOIN patient p ON p.hn = o.hn  
 INNER JOIN opdscreen os ON os.vn = o.vn  
-WHERE os.cc LIKE'%ช้างขวา%' AND o.vstdate = '2025-01-13'   
+WHERE os.cc LIKE'%ท่าทองใหม่%' AND o.vstdate = '2025-02-28'   
 AND (os.cc LIKE '%ส่งตรวจ%' OR os.cc LIKE '%ส่งเจาะ%' OR os.cc LIKE '%ส่งเลือด%' OR os.cc LIKE '%เจาะเลือด%')  
 GROUP BY  o.vn, p.hn, p.pname, p.fname, p.lname, p.sex, p.birthday,os.cc
+
+660007201

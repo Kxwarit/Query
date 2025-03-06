@@ -17,7 +17,7 @@ LEFT OUTER JOIN doctor d ON d.code = o.officer_doctor_code
 WHERE d.code = '1283' 
 ORDER BY log.officer_activity_log_date
 
-WITH ranked_logs AS (
+WITH ranked_logs AS ( 3
     SELECT 
         log.officer_activity_log_id, 
         log.officer_activity_log_date,
