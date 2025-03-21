@@ -24,3 +24,15 @@ LEFT OUTER JOIN doctor d ON d.code = o.doctor AND d.position_id = '1'
 WHERE o.vstdate BETWEEN '2024-12-01' AND '2024-12-31' AND (o.vsttime >= '07:00:00' OR o.vsttime < '16:30:00')
 GROUP BY o.vstdate, d.name 
 ORDER BY d.name
+---------
+SELECT d.name, count(DISTINCT o.vn) as patient
+FROM ovst_service_time k
+LEFT OUTER JOIN ovst o ON o.vn = k.vn
+LEFT OUTER JOIN opduser u ON u.loginname = k.staff
+INNER JOIN doctor d ON d.code = u.doctorcode AND d.position_id = '1' 
+WHERE ovst_service_time_type_code= 'OPD-DOCTOR'
+AND service_begin_datetime::date BETWEEN '2025-02-10' AND '2025-02-10'
+AND service_begin_datetime::time >= '08:30:00' AND service_begin_datetime::time <= '16:00:00' 
+GROUP BY d.name, d.code
+ORDER BY d.code
+LIMIT 100 
