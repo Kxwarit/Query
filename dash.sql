@@ -1,5 +1,3 @@
-
-
 ----1.1
 CASE 
     WHEN MAX(buddha_year) > 2567 THEN  

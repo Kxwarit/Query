@@ -27,9 +27,7 @@ AND lo.lab_items_code = '3604'
 AND (lo.lab_order_result IS NOT NULL  OR lo.lab_order_result <> '...') 
 AND lo.lab_order_result BETWEEN '110' AND '125'
 GROUP BY  o.vn, o.vstdate, o.vn, p.cid, p.pname, p.fname, p.lname, p.addrpart, p.moopart, os.cc, lo.lab_order_result   
----------------+
-
-
+---------------
 
 SELECT o.vstdate, 
 o.vn, 

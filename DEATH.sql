@@ -1,4 +1,4 @@
-//IPD Dischage by death แต่ใน DEATH ไม่ตาย
+--IPD Dischage by death แต่ใน DEATH ไม่ตาย
 SELECT i.dchdate, p.hn, concat(p.pname,p.fname,' ',p.lname) as patient_name
 FROM ipt i
 LEFT OUTER JOIN patient p ON p.hn = i.hn
@@ -7,7 +7,7 @@ AND i.hn NOT IN (SELECT hn FROM death)
 ORDER BY i.dchdate DESC
 
 ----------------------------------
-//IPD Dischage by death แต่ใน clinicmember ไม่ตาย
+--IPD Dischage by death แต่ใน clinicmember ไม่ตาย
 SELECT i.dchdate, p.hn, concat(p.pname,p.fname,' ',p.lname) as patient_name, STRING_AGG(c.name, ', ') as clinic, d.death_date
 FROM ipt i
 LEFT OUTER JOIN patient p ON p.hn = i.hn
@@ -20,7 +20,7 @@ GROUP BY i.dchdate, p.hn, p.pname, p.fname, p.lname, d.death_date
 ORDER BY i.dchdate DESC
 
 --------------------------------
-//IPD Dischage by death โดยบันทึกการตายใน death แล้วว แต่ใน clinicmember ไม่ตาย
+--IPD Dischage by death โดยบันทึกการตายใน death แล้วว แต่ใน clinicmember ไม่ตาย
 SELECT i.dchdate, p.hn, concat(p.pname,p.fname,' ',p.lname) as patient_name, STRING_AGG(c.name, ', ') as clinic, d.death_date
 FROM ipt i
 LEFT OUTER JOIN patient p ON p.hn = i.hn
@@ -34,7 +34,7 @@ GROUP BY i.dchdate, p.hn, p.pname, p.fname, p.lname, d.death_date
 ORDER BY i.dchdate DESC
 
 ---------------------------------
-//IPD Dischage by death โดยยังไม่บันทึกการตายใน death และใน clinicmember ไม่ตาย
+--IPD Dischage by death โดยยังไม่บันทึกการตายใน death และใน clinicmember ไม่ตาย
 SELECT i.dchdate, p.hn, concat(p.pname,p.fname,' ',p.lname) as patient_name, STRING_AGG(c.name, ', ') as clinic, d.death_date
 FROM ipt i
 LEFT OUTER JOIN patient p ON p.hn = i.hn
