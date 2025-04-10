@@ -1,23 +1,4 @@
-SELECT *
-FROM officer_activity_log log
-INNER JOIN doctor d ON d.code = log.officer_id 
-WHERE d.code = '1292' 
-limit 100
-
-SELECT *
-FROM officer_activity_log log
-INNER JOIN doctor d ON d.code = CAST(log.officer_id AS VARCHAR)
-WHERE d.code = '1283'
-limit 100 
-
-SELECT *
-FROM officer_activity_log log
-LEFT OUTER JOIN officer o ON o.officer_id = log.officer_id
-LEFT OUTER JOIN doctor d ON d.code = o.officer_doctor_code
-WHERE d.code = '1283' AND log.officer_activity_log_date = '2025-03-05'
-ORDER BY log.officer_activity_log_datetime
-
-WITH ranked_logs AS ( 3
+WITH ranked_logs AS ( 
     SELECT 
         log.officer_activity_log_id, 
         log.officer_activity_log_date,
@@ -32,16 +13,16 @@ WITH ranked_logs AS ( 3
 SELECT officer_activity_log_id, officer_activity_log_date, officer_activity_log_datetime, officer_id
 FROM ranked_logs
 WHERE rn = 1;
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-SELECT log.officer_activity_log_date, log.officer_activity_log_datetime
+SELECT *
 FROM officer_activity_log log
 LEFT OUTER JOIN officer o ON o.officer_id = log.officer_id
 LEFT OUTER JOIN doctor d ON d.code = o.officer_doctor_code
 WHERE d.code = '1283' 
 ORDER BY log.officer_activity_log_date
 
-อยากรู้ว่าในแต่ละวันของ log.officer_activity_log_date นั้นมี log.officer_activity_log_id น้อยสุดและมากสุดอันไหนให้แต่ log.officer_activity_log_datetime ด้วย
-
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 WITH ranked_logs AS (
     SELECT 
@@ -68,7 +49,9 @@ FROM ranked_logs
 LEFT JOIN ovst ov ON ov.doctor = d.code AND ov.vstdate = officer_activity_log_date
 GROUP BY officer_activity_log_date, doctor, name
 ORDER BY doctor;
--------
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 WITH ranked_logs AS (
     SELECT 
         os.sign_date, 

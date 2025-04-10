@@ -2,7 +2,7 @@
     date1, date2 : DateTime;
     ds1, ds2 : String;
 
---------------------------
+----------------------------------------------------------------------------------------------------------------------
 
       GetDateRangeDialog(date1, date2);
       ds1 := FormatDateTime('yyyy-mm-dd', date1);
@@ -18,7 +18,7 @@
       +'  วันที่ ' + FormatThaiDate('dd/mm/yyyy เวลา hh:mm:ss น.',CurrentDateTime);
       Reportname.Text := GetReportName;
 
----------------------------
+-----------------------------------------------------------------------------------------------------------------------
 
         'จำนวน  '
             + GetSQLStringData('SELECT TO_CHAR(COUNT(*)::numeric, "FM999,999") as count_data'
@@ -28,21 +28,21 @@
             + ' ' ) 
             + '  รายการ '
 
--------------------------
+---------------------------------------------------------------------------------------------------------------------
 
         FormatThaiDate('dd/mm/yyyy', DBPipeline['vstdate']); 
 
         BETWEEN "'+ds1+'" AND "'+ds2+'"
 
 
---------------------------เบอร์
+--------------------------เบอร์--------------------------------------------------------------------------------------------
 STRING_AGG( DISTINCT CASE 
  WHEN p.hometel <> '' AND p.hometel ~ '^[0-9-]+$' AND p.hometel !~ '^(.)\1*$' THEN p.hometel 
  WHEN p.mobile_phone_number <> '' AND p.mobile_phone_number ~ '^[0-9-]+$' AND p.mobile_phone_number !~ '^(.)\1*$' THEN p.mobile_phone_number 
  WHEN p.informtel <> '' AND p.informtel ~ '^[0-9-]+$' AND p.informtel !~ '^(.)\1*$' THEN p.informtel 
 ELSE NULL END, ', ') AS contact
 
---------------------------ที่อยู่
+--------------------------ที่อยู่--------------------------------------------------------------------------------------------
 STRING_AGG(CASE WHEN th.amppart = p.amppart  AND th.tmbpart = p.tmbpart THEN th.name ELSE NULL END, ', ') AS tmb,
 STRING_AGG(CASE WHEN th.amppart = p.amppart AND th.tmbpart = "00" THEN th.name ELSE NULL END, ', ') AS amp,
 STRING_AGG(CASE WHEN th.amppart = "00" AND th.tmbpart = "00" THEN th.name ELSE NULL END, ', ') AS chw
