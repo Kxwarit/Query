@@ -167,6 +167,23 @@ FROM (
 ) q
 GROUP BY q.doctor_department_name, q.oper_name
 ORDER BY q.oper_name
+------------
+
+SELECT 
+        ol.operation_type_id,*
+    FROM operation_list ol
+    LEFT JOIN operation_detail od ON od.operation_id = ol.operation_id
+    LEFT JOIN operation_item oi ON oi.operation_item_id = od.operation_item_id
+    LEFT JOIN operation_type ot ON ot.operation_type_id = ol.operation_type_id
+    LEFT JOIN operation_anes oa ON oa.operation_id = ol.operation_id
+    LEFT JOIN operation_anes_type oat ON oa.anes_type_id = oat.anes_type_id
+    LEFT JOIN operation_wound ow ON ow.operation_wound_id = od.operation_wound_id
+    LEFT JOIN operation_time_type ott ON ol.operation_time_type_id = ott.operation_time_type_id
+    LEFT JOIN operation_team om ON om.operation_id = ol.operation_id AND om.position_id = '1'
+    LEFT JOIN doctor d ON d.code = om.doctor 
+    LEFT JOIN doctor_department dd ON d.doctor_department_id = dd.doctor_department_id
+    WHERE ol.operation_date BETWEEN '2025-01-01' AND '2025-03-31'
+
 
 ---รหัสโรค Refer--------------------------------------------------------------------------------------------
 SELECT CONCAT(icd.code, ' - ',icd.name) as icd10, count(DISTINCT o.hn)  as hn, count(DISTINCT o.vn)  as vn

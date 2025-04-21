@@ -42,6 +42,10 @@ STRING_AGG( DISTINCT CASE
  WHEN p.informtel <> '' AND p.informtel ~ '^[0-9-]+$' AND p.informtel !~ '^(.)\1*$' THEN p.informtel 
 ELSE NULL END, ', ') AS contact
 
+CASE WHEN p.informaddr <> "" then p.informaddr ELSE CONCAT_WS( " ", p.addrpart, (CASE WHEN p.moopart <> "" THEN CONCAT("หมู่ ", p.moopart)END), th.full_name) END as addr
+
+LEFT OUTER JOIN thaiaddress th ON th.chwpart = p.chwpart AND th.amppart = p.amppart AND th.tmbpart = p.tmbpart
+
 --------------------------ที่อยู่--------------------------------------------------------------------------------------------
 STRING_AGG(CASE WHEN th.amppart = p.amppart  AND th.tmbpart = p.tmbpart THEN th.name ELSE NULL END, ', ') AS tmb,
 STRING_AGG(CASE WHEN th.amppart = p.amppart AND th.tmbpart = "00" THEN th.name ELSE NULL END, ', ') AS amp,

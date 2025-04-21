@@ -19,8 +19,8 @@ SELECT *
 FROM officer_activity_log log
 LEFT OUTER JOIN officer o ON o.officer_id = log.officer_id
 LEFT OUTER JOIN doctor d ON d.code = o.officer_doctor_code
-WHERE d.code = '1283' 
-ORDER BY log.officer_activity_log_date
+WHERE d.code = '1283' AND log.officer_activity_log_date = '2025-03-05'
+ORDER BY log.officer_activity_log_date 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
