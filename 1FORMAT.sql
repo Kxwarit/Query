@@ -50,4 +50,4 @@ LEFT OUTER JOIN thaiaddress th ON th.chwpart = p.chwpart AND th.amppart = p.ampp
 STRING_AGG(CASE WHEN th.amppart = p.amppart  AND th.tmbpart = p.tmbpart THEN th.name ELSE NULL END, ', ') AS tmb,
 STRING_AGG(CASE WHEN th.amppart = p.amppart AND th.tmbpart = "00" THEN th.name ELSE NULL END, ', ') AS amp,
 STRING_AGG(CASE WHEN th.amppart = "00" AND th.tmbpart = "00" THEN th.name ELSE NULL END, ', ') AS chw
-
+ฃ
