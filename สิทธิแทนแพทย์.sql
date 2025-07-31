@@ -10,7 +10,8 @@ WHERE
     d.active = 'Y'
     AND d.position_id = '1' 
     AND o.officer_active = 'Y'
-    AND d.code = 'xxxx' ----รหัสแพทย์
+    --AND d.code = 'xxxx' ----รหัสแพทย์
+    --AND o.officer_doctor_code = 'xxxx' ---รหัสพยาบาล 
     AND o.officer_id IN (
         SELECT officer_id 
         FROM officer_group_list 
@@ -22,6 +23,7 @@ WHERE
         WHERE og.doctor_code = d.code 
           AND og.grant_login = o.officer_login_name
           AND o.officer_active = 'Y'
+         
     );
 
 --------------------------เพิ่มพยาบาลให้แพทย์--------------------------------
@@ -37,7 +39,8 @@ WHERE
     d.active = 'Y'
     AND d.position_id = '1' 
     AND o.officer_active = 'Y'
-    AND d.code = 'xxxx' ----รหัสแพทย์
+    --AND d.code = 'xxxx' ----รหัสแพทย์
+    --AND o.officer_doctor_code = 'xxxx' ---รหัสพยาบาล 
     AND o.officer_id IN (
         SELECT officer_id 
         FROM officer_group_list 
@@ -49,6 +52,7 @@ WHERE
         WHERE og.doctor_code = d.code 
           AND og.grant_login = o.officer_login_name
           AND o.officer_active = 'Y'
+         
     );
 
 --------------------------ดูรายการที่ต้องลบออก----------------------------------------
